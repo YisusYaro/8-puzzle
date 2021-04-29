@@ -1,7 +1,8 @@
 import numpy as np
 
 class Puzzle:
-    def __init__(self):
+    def __init__(self, controller):
+        self.controller = controller
         self.estadoInicial = np.matrix([[0,1,2],[3,4,5],[6,7,8]])
         self.estadoFinal = np.matrix([[3,1,2],[4,0,5],[6,7,8]])
         #self.estadoInicial = np.matrix([[0,2,3],[1,4,5],[8,7,6]])
