@@ -6,9 +6,7 @@ class Controller:
 
     def __init__(self):
         self.puzzle = Puzzle(self)
-        self.animador = Animador()
+        self.animador = Animador(self)
 
-    def init(self):
-        self.puzzle.aestrella()
-        self.animador.animar(self.puzzle.aestrella())
+
         
