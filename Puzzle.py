@@ -9,6 +9,24 @@ class Puzzle:
         self.estadoInicial = np.matrix([[0,2,3],[1,4,5],[8,7,6]])
         self.estadoFinal = np.matrix([[1,2,3],[8,0,4],[7,6,5]])
 
+    def cambiarFichaEstadoInicial(self,ni,nj,USER_INP):
+        if(USER_INP=='' or USER_INP==' '):
+            USER_INP='0'
+        if(USER_INP=='0' or USER_INP=='1' or USER_INP=='2' or USER_INP=='3' or USER_INP=='4' or USER_INP=='5' or USER_INP=='6' or USER_INP=='7' or USER_INP=='8'):
+            vi,vj = np.where(self.estadoInicial == int(USER_INP))
+            cambio = self.estadoInicial[ni,nj]
+            self.estadoInicial[ni,nj] = USER_INP
+            self.estadoInicial[vi,vj] = cambio
+
+    def cambiarFichaEstadoFinal(self,ni,nj,USER_INP):
+        if(USER_INP=='' or USER_INP==' '):
+            USER_INP='0'
+        if(USER_INP=='0' or USER_INP=='1' or USER_INP=='2' or USER_INP=='3' or USER_INP=='4' or USER_INP=='5' or USER_INP=='6' or USER_INP=='7' or USER_INP=='8'):
+            vi,vj = np.where(self.estadoFinal == int(USER_INP))
+            cambio = self.estadoFinal[ni,nj]
+            self.estadoFinal[ni,nj] = USER_INP
+            self.estadoFinal[vi,vj] = cambio
+         
 
     def obtenerCamino(self, padres):
         camino = []
@@ -132,7 +150,6 @@ class Puzzle:
             estado = cola.pop(0)
             for vecinoOperador in self.operadores(estado).copy():
                 if self.noEstaEnVisitados(vecinoOperador, visitados):
-                    #print(vecinoOperador)
                     visitados.append(vecinoOperador)
                     cola.append(vecinoOperador)
                     padres[vecinoOperador.tobytes()] = estado.tobytes()
