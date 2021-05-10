@@ -6,6 +6,8 @@ class Animador:
     
     def animar(self, camino):
 
+        print(camino[0])
+
         fig = plt.figure()
         plt.gca().axes.get_xaxis().set_visible(False)
         plt.gca().axes.get_yaxis().set_visible(False)
@@ -24,7 +26,7 @@ class Animador:
                         plt.text(j, i, camino[x][i,j], size=20, va="center", ha="center", multialignment="left")
 
 
-        ani = animation.FuncAnimation(fig, animate, frames=len(camino), interval=700, repeat=False)
+        ani = animation.FuncAnimation(fig, animate, frames=len(camino), interval=200, repeat=True)
 
         plt.show()
 

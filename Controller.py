@@ -1,5 +1,5 @@
 from Puzzle import Puzzle
-from Display import Display
+#from Display import Display
 from Animador import Animador
 
 class Controller:
@@ -9,5 +9,6 @@ class Controller:
         self.animador = Animador()
 
     def init(self):
-        self.animador.animar(self.puzzle.bfs())
+        self.puzzle.aestrella()
+        self.animador.animar(self.puzzle.aestrella())
         

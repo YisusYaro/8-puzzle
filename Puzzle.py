@@ -1,12 +1,14 @@
 import numpy as np
+import time
 
 class Puzzle:
     def __init__(self, controller):
         self.controller = controller
-        self.estadoInicial = np.matrix([[0,1,2],[3,4,5],[6,7,8]])
-        self.estadoFinal = np.matrix([[3,1,2],[4,0,5],[6,7,8]])
-        #self.estadoInicial = np.matrix([[0,2,3],[1,4,5],[8,7,6]])
-        #self.estadoFinal = np.matrix([[1,2,3],[8,0,4],[7,6,5]])
+        #self.estadoInicial = np.matrix([[0,1,2],[3,4,5],[6,7,8]])
+        #self.estadoFinal = np.matrix([[3,1,2],[4,0,5],[6,7,8]])
+        self.estadoInicial = np.matrix([[0,2,3],[1,4,5],[8,7,6]])
+        self.estadoFinal = np.matrix([[1,2,3],[8,0,4],[7,6,5]])
+
 
     def obtenerCamino(self, padres):
         camino = []
@@ -64,6 +66,56 @@ class Puzzle:
                 return False
         return True
 
+    def manhatan(self, estado):
+        m=0
+        for i in range(1,9):
+            ei,ej = np.where(estado == i)
+            fi,fj = np.where(self.estadoFinal == i)
+            m = m + abs(ei-fi)
+            m = m + abs(ej-fj)
+        return m
+
+    def malColocadas(self, estado):
+        m=0
+        for i in range(1,9):
+            ei,ej = np.where(estado == i)
+            fi,fj = np.where(self.estadoFinal == i)
+            if((ei!=fi) or (ej!=fj)):
+                m = m +1 
+        return m
+
+    def aestrella(self):
+        visitados = []
+        estado = self.estadoInicial
+        visitados.append(estado)
+        camino = []
+        numeroVisitados = 0
+        peso = 0
+        bandera = True
+        while True and bandera:
+            camino.append(visitados[len(visitados)-1])
+            #print("operador")
+            #print(visitados[len(visitados)-1])
+
+            if(np.array_equal(visitados[len(visitados)-1],self.estadoFinal)):
+                break
+            i=0
+            for vecinoOperador in self.operadores(visitados[len(visitados)-1]).copy():
+                if self.noEstaEnVisitados(vecinoOperador, visitados):
+                    if(i==0):
+                        visitados.append(vecinoOperador)
+                        peso=peso+self.malColocadas(vecinoOperador)
+                    else:
+                        if( (peso + self.malColocadas(vecinoOperador)+ self.manhatan(vecinoOperador)) < ( peso + self.malColocadas(visitados[len(visitados)-1])+ self.manhatan(visitados[len(visitados)-1]))):
+                            visitados.pop(len(visitados)-1)
+                            visitados.append(vecinoOperador)
+                            peso=peso+self.malColocadas(vecinoOperador)
+                            
+                    
+                i = i+1
+        return camino
+                
+
     def bfs(self):
 
         visitados = []
@@ -78,15 +130,14 @@ class Puzzle:
 
         while cola and not fin:
             estado = cola.pop(0)
-            for neighbour in self.operadores(estado).copy():
-                if self.noEstaEnVisitados(neighbour, visitados):
-                    #print(neighbour)
-                    visitados.append(neighbour)
-                    cola.append(neighbour)
-                    padres[neighbour.tobytes()] = estado.tobytes()
-                    if(neighbour==self.estadoFinal).all():
+            for vecinoOperador in self.operadores(estado).copy():
+                if self.noEstaEnVisitados(vecinoOperador, visitados):
+                    #print(vecinoOperador)
+                    visitados.append(vecinoOperador)
+                    cola.append(vecinoOperador)
+                    padres[vecinoOperador.tobytes()] = estado.tobytes()
+                    if(vecinoOperador==self.estadoFinal).all():
                         fin = True
-                        #print("ALERTA ROJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa")
                         break
                         
         return self.obtenerCamino(padres)
