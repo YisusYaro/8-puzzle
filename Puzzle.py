@@ -112,8 +112,6 @@ class Puzzle:
         bandera = True
         while True and bandera:
             camino.append(visitados[len(visitados)-1])
-            #print("operador")
-            #print(visitados[len(visitados)-1])
 
             if(np.array_equal(visitados[len(visitados)-1],self.estadoFinal)):
                 break

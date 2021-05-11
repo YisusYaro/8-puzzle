@@ -46,7 +46,6 @@ class Animador:
                         axarr[1].text(j, i, self.controller.puzzle.estadoFinal[i,j], size=20, va="center", ha="center", multialignment="left")
 
         def getxy(event):    
-            print(event.x, event.y)
             if(event.x>80 and event.x<305 and event.y>130 and event.y<355):
                 USER_INP = simpledialog.askstring(title="Editar", prompt="Escribe el nuevo valor:")
                 if(event.x>80 and event.x<155 and event.y>130 and event.y<205):
@@ -116,7 +115,7 @@ class Animador:
     
     def animar(self,camino,metodo):
 
-
+        
 
         fig, axarr = plt.subplots(1,2)
 
@@ -137,14 +136,31 @@ class Animador:
         axarr[1].set_title('Estado Final')
 
 
+        def verMovimiento(pasoAnterior, paso):
+            ia,ja = np.where(pasoAnterior == 0)
+            ip,jp = np.where(paso == 0)
+
+            if(ip > ia):
+                return "Abajo"
+            if(ip < ia):
+                return "Arriba"
+            if(jp > ja):
+                return "Derecha"
+            if(jp < ja):
+                return "Izquierda"
+
+
         def animate(x):
 
             axarr[0].cla()
             axarr[0].imshow(camino[x])
+
             if(x==0):
                 axarr[0].set_title("Estado Inicial")
+            if(x>0):
+                axarr[0].set_title(str(x)+ ": "+verMovimiento(camino[x-1], camino[x]))
             if(x==(len(camino)-1)):
-                axarr[0].set_title("Estado Final")
+                axarr[0].set_title("Estado Final\n"+str(x)+": "+verMovimiento(camino[x-1], camino[x]))
             for i in range(0,3):
                 for j in range(0,3):
                     if camino[x][i,j] != 0:
