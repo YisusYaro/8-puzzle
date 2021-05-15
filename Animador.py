@@ -1,11 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import tkinter as Tk
 from tkinter import simpledialog
+from time import time 
+
 
 class Animador:
     
@@ -108,10 +109,16 @@ class Animador:
         Tk.mainloop()
 
     def setCaminoBFS(self):
-        self.animar(self.controller.puzzle.bfs(),"BFS")
+        tiempo_inicial = time() 
+        camino = self.controller.puzzle.bfs()
+        tiempo_final = time() 
+        self.animar(camino,"BFS ("+str(tiempo_final - tiempo_inicial)[0:7] + " s)")
 
     def setCaminoAestrella(self):
-        self.animar(self.controller.puzzle.aestrella(), "A*")
+        tiempo_inicial = time() 
+        camino = self.controller.puzzle.aestrella()
+        tiempo_final = time() 
+        self.animar(camino,"A* ("+str(tiempo_final - tiempo_inicial)[0:7] + " s)")
     
     def animar(self,camino,metodo):
 

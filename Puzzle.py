@@ -1,5 +1,4 @@
 import numpy as np
-import time
 
 class Puzzle:
     def __init__(self, controller):
