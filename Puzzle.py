@@ -6,7 +6,9 @@ class Puzzle:
         self.controller = controller
         #self.estadoInicial = np.matrix([[0,1,2],[3,4,5],[6,7,8]])
         #self.estadoFinal = np.matrix([[3,1,2],[4,0,5],[6,7,8]])
-        self.estadoInicial = np.matrix([[0,2,3],[1,4,5],[8,7,6]])
+        #self.estadoInicial = np.matrix([[0,2,3],[1,4,5],[8,7,6]])
+        #self.estadoFinal = np.matrix([[1,2,3],[8,0,4],[7,6,5]])
+        self.estadoInicial = np.matrix([[4,8,1],[3,0,2],[7,6,5]])
         self.estadoFinal = np.matrix([[1,2,3],[8,0,4],[7,6,5]])
 
     def cambiarFichaEstadoInicial(self,ni,nj,USER_INP):
@@ -84,14 +86,14 @@ class Puzzle:
                 return False
         return True
 
-    def manhatan(self, estado):
+    def manhattan(self, estado):
         m=0
         for i in range(1,9):
             ei,ej = np.where(estado == i)
             fi,fj = np.where(self.estadoFinal == i)
             m = m + abs(ei-fi)
             m = m + abs(ej-fj)
-        return m
+        return int(m)
 
     def malColocadas(self, estado):
         m=0
@@ -100,36 +102,32 @@ class Puzzle:
             fi,fj = np.where(self.estadoFinal == i)
             if((ei!=fi) or (ej!=fj)):
                 m = m +1 
-        return m
+        return int(m)
 
     def aestrella(self):
-        visitados = []
-        estado = self.estadoInicial
-        visitados.append(estado)
-        camino = []
-        numeroVisitados = 0
         peso = 0
-        bandera = True
-        while True and bandera:
-            camino.append(visitados[len(visitados)-1])
-
-            if(np.array_equal(visitados[len(visitados)-1],self.estadoFinal)):
+        ultimoPeso = 0
+        visitados = []
+        visitados.append(self.estadoInicial)
+        while True:
+            auxiliar = True
+            if(visitados[-1]==self.estadoFinal).all():
                 break
-            i=0
-            for vecinoOperador in self.operadores(visitados[len(visitados)-1]).copy():
+            for vecinoOperador in self.operadores(visitados[-1]):
                 if self.noEstaEnVisitados(vecinoOperador, visitados):
-                    if(i==0):
+                    if(auxiliar):
                         visitados.append(vecinoOperador)
-                        peso=peso+self.malColocadas(vecinoOperador)
+                        auxiliar=False
+                        ultimoPeso = self.malColocadas(vecinoOperador)
+                        peso = peso + self.malColocadas(vecinoOperador)
                     else:
-                        if( (peso + self.malColocadas(vecinoOperador)+ self.manhatan(vecinoOperador)) < ( peso + self.malColocadas(visitados[len(visitados)-1])+ self.manhatan(visitados[len(visitados)-1]))):
-                            visitados.pop(len(visitados)-1)
+                        if( (peso + self.malColocadas(vecinoOperador) + self.manhattan(vecinoOperador)) < ( peso + self.malColocadas(vecinoOperador) + self.manhattan(visitados[-1])) ):
+                            visitados.pop()
                             visitados.append(vecinoOperador)
-                            peso=peso+self.malColocadas(vecinoOperador)
-                            
-                    
-                i = i+1
-        return camino
+                            peso = peso - self.malColocadas(visitados[-1])
+                            peso = peso + self.malColocadas(vecinoOperador)
+                            ultimoPeso = self.malColocadas(vecinoOperador)
+        return visitados
                 
 
     def bfs(self):

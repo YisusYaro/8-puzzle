@@ -1,5 +1,4 @@
 from Puzzle import Puzzle
-#from Display import Display
 from Animador import Animador
 
 class Controller:
