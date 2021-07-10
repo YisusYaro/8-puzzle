@@ -13,7 +13,7 @@ _Instalar librerías por pip o pip3_
 pip3 install numpy matplotlib tk
 ```
 
-_Usando Docker :whale:_
+_O usando Docker :whale:_
 
 ```
 docker build -t 8-puzzle .  
@@ -27,7 +27,7 @@ _Usar el siguiente comando_
 python3 main.py
 ```
 
-_Usando Docker :whale:_
+_O usando Docker :whale:_
 
 ```
 docker run -it --rm \
